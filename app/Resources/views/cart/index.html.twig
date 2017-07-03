@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <script>
+$(function() {
+  $('.increment').on(
+    'click',
+    function() {
+      var quantity = $(this).closest('tr').find('input[name^="quantity"]');
+      quantity.val(parseInt(quantity.val(), 10) + 1);
+    });
+
+  $('.decrement').on(
+    'click',
+    function(event) {
+      var quantity = $(this).closest('tr').find('input[name^="quantity"]');
+      if (parseInt(quantity.val(), 10) == 0) {
+        event.preventDefault();
+        return;
+      }
+
+      quantity.val(parseInt(quantity.val(), 10) - 1);
+    });
+});
+  </script>
+
+  <div class="container">
+    <div class="page-header">
+      <h1>ショッピングカート</h1>
+    </div>
+    <div class="row">
+      <form method="POST">
+        <div class="col-md-7">
+          <h2>購入した商品</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <td>商品</td>
+                <td class="text-center">単価</td>
+                <td class="text-center">数量</td>
+                <td class="text-right">金額</td>
+              </tr>
+            </thead>
+            <tbody>
+              {% for element in cart.products %}
+                <tr>
+                  <td>
+                    <strong>{{ element.product.name }}</strong>
+                    {% if element.product.isCampaign %}
+                      <span class="label label-warning">キャンペーン</span>
+                    {% endif %}
+                    <input type="hidden" name="name{{ loop.index0 }}" value="{{ element.product.name }}" />
+                    <input type="hidden" name="quantity{{ loop.index0 }}" value="{{ element.quantity }}" />
+                  </td>
+                  <td class="text-center">{{ element.product.price }}</td>
+                  <td class="text-center">
+                    <button class="btn btn-danger decrement" type="submit"><i class="glyphicon glyphicon-minus"></i></button>
+                    &nbsp;
+                    {{ element.quantity }}
+                    &nbsp;
+                    <button class="btn btn-primary increment" type="submit"><i class="glyphicon glyphicon-plus"></i></button>
+                  </td>
+                  <td class="text-right">{{ element.product.price * element.quantity }}</td>
+                </tr>
+              {% endfor %}
+              <tr>
+                <td colspan="3"><strong>商品合計</strong></td>
+                <td class="text-right">{{ cart.productTotalPrice }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>送料</h2>
+          <table class="table">
+            <tbody>
+              <tr>
+                <td colspan="3">送料</td>
+                <td class="text-right">{{ cart.shippingCost }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>割引</h2>
+          {% if cart.discounts|length > 0 %}
+            <table class="table">
+              <thead>
+                <tr>
+                  <td>割引</td>
+                  <td class="text-right">金額</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% for discount in cart.discounts %}
+                  <tr>
+                    <td>{{ discount.name }}</td>
+                    <td class="text-right">{{ discount.price }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <div class="alert alert-success" role="alert">割引はありません。</div>
+          {% endif %}
+
+          <h2 class="text-right">合計 <strong>{{ cart.totalPrice }}円</strong> </h2>
+
+        </div>
+        <div class="col-md-5">
+          <h2>割引のルール</h2>
+          <textarea name="rule" rows="10" cols="40">{{ rule }}</textarea>
+          <button class="btn btn-info">ルールの変更</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

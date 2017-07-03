@@ -13,11 +13,15 @@ class Discounter
 
     public function __construct($yaml)
     {
-        $this->config = Yaml::parse($yaml);
+        if ($yaml) {
+            $this->config = Yaml::parse($yaml);
+        }
     }
 
     public function discount(Cart $cart)
     {
+        if (! $this->config) return;
+
         $expressionLanguage = new ExpressionLanguage();
 
         $cart->clearDiscount();

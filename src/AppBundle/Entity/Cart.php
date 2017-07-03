@@ -22,6 +22,11 @@ class Cart
             + $quantity;
     }
 
+    public function getProducts()
+    {
+        return $this->elements;
+    }
+
     public function addDiscount(Discount $discount)
     {
         $this->discounts[] = $discount;
@@ -45,7 +50,8 @@ class Cart
     public function existsCampaignProduct()
     {
         foreach ($this->elements as $element) {
-            if ($element['product']->isCampaign) return true;
+            if ($element['product']->isCampaign
+                && $element['quantity'] > 0) return true;
         }
         return false;
     }
