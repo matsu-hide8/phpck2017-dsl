@@ -1,4 +1,19 @@
-phpck2017_dsl
+PHPカンファレンス関西2017 PHPにおけるDSL
 =============
 
-A Symfony project created on June 25, 2017, 10:04 am.
+「PHPにおけるDSL」のサンプルです。
+
+[Composer](https://getcomposer.org/)で必要なライブラリをインストールし、ビルトインサーバーを起動します。
+
+```
+$ composer install
+$ php bin/console server:run
+```
+
+http://localhost:8000 にアクセスすると動作を確認することができます。
+
+テストも実行することができます。
+
+```
+$ php vendor/bin/phpunit tests
+```
