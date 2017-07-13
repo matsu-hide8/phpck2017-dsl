@@ -13,7 +13,7 @@ use AppBundle\Service\Dsl\Discounter;
 class CartController extends Controller
 {
     /**
-     * @Route("/cart", name="cart_index")
+     * @Route("/", name="cart_index")
      * @Method("GET")
      */
     public function indexAction(Request $request)
@@ -39,7 +39,7 @@ class CartController extends Controller
     }
 
     /**
-     * @Route("/cart", name="cart_index_post")
+     * @Route("/", name="cart_index_post")
      * @Method("POST")
      */
     public function postAction(Request $request)
